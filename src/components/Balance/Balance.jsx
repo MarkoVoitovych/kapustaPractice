@@ -15,6 +15,7 @@ function Balance({ balance, handleSubmit, handleChange }) {
         />{' '}
         <p>UAH</p>
       </label>
+      <button type="submit">Confirm</button>
     </form>
   );
 }

@@ -5,7 +5,7 @@ export const getUserInfo = async () => {
   return data;
 };
 
-export const setBalance = async userBalance => {
+export const setUserBalance = async userBalance => {
   const { data } = await instance.patch('/user/balance', {
     newBalance: userBalance,
   });
