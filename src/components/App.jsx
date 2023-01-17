@@ -2,12 +2,15 @@ import { Suspense, useEffect } from 'react';
 import { lazy } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { getCurrentUser } from 'redux/auth/authOperations';
 import { selectIsAuth } from 'redux/auth/authSelectors';
 import SharedLayout from './SharedLayout';
 
-const StartPage = lazy(() => import('pages/StartPage'));
-const StatisticsPage = lazy(() => import('pages/StatisticsPage'));
-const WalletPage = lazy(() => import('pages/WalletPage'));
+const StartPage = lazy(() => import('pages/StartPage/StartPage'));
+const StatisticsPage = lazy(() =>
+  import('pages/StatisticsPage/StatisticsPage')
+);
+const WalletPage = lazy(() => import('pages/WalletPage/WalletPage'));
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -21,9 +24,9 @@ export const App = () => {
     return isAuth ? <Navigate to="/wallet" /> : component;
   };
 
-  // useEffect(() => {
-  //   dispatch(refreshUser());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -32,7 +35,9 @@ export const App = () => {
           <Route index element={<PublicRoute component={<StartPage />} />} />
           <Route
             path="register"
-            element={<PublicRoute component={<StartPage registrate />} />}
+            element={
+              <PublicRoute component={<StartPage registrate={true} />} />
+            }
           />
           <Route
             path="wallet"

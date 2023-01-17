@@ -20,7 +20,8 @@ export const signUp = async userData => {
 
 export const logIn = async userData => {
   const { data } = await instance.post('/auth/login', userData);
-  setToken(data.result.accessToken);
+  console.log('data', data);
+  setToken(data.accessToken);
   return data;
 };
 

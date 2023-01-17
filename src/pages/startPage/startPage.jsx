@@ -16,7 +16,7 @@ function StartPage({ registrate = false }) {
     event.preventDefault();
     if (registrate) {
       dispatch(signUp(form));
-      // event.target.reset();
+      event.target.reset();
       return;
     }
     dispatch(logIn(form));
@@ -26,7 +26,7 @@ function StartPage({ registrate = false }) {
     <div>
       <h1>Kapusta</h1>
       <p>Smart Finance</p>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label>
           Email:
           <input
@@ -49,16 +49,12 @@ function StartPage({ registrate = false }) {
         </label>
         {registrate ? (
           <div>
-            <button type="submit" onSubmit={handleSubmit}>
-              Registrate
-            </button>
+            <button type="submit">Registrate</button>
             <Link to="/">Back to log in</Link>
           </div>
         ) : (
           <div>
-            <button type="submit" onSubmit={handleSubmit}>
-              Log in
-            </button>
+            <button type="submit">Log in</button>
             <Link to="/register">Registration</Link>
           </div>
         )}
