@@ -20,26 +20,47 @@ export const signUp = async userData => {
 
 export const logIn = async userData => {
   const { data } = await instance.post('/auth/login', userData);
-  console.log('data', data);
   setToken(data.accessToken);
   return data;
 };
 
-export const logOut = async () => {
+export const logOut = async accessToken => {
+  setToken(accessToken);
   const { data } = await instance.post('/auth/logout');
   setToken();
   return data;
 };
 
 export const getCurrentUser = async ({ sid, refreshToken }) => {
-  try {
-    setToken(refreshToken);
-    const { data } = await instance.post('/auth/refresh', { sid });
-    return data;
-  } catch (error) {
-    setToken();
-    throw error;
-  }
+  // try {
+  setToken(refreshToken);
+  const { data } = await instance.post('/auth/refresh', { sid });
+  setToken(data.newAccessToken);
+  return data;
+  // } catch (error) {
+  // setToken();
+  // throw error;
+  // }
 };
+
+// instance.interceptors.response.use(
+//   response => response,
+//   async error => {
+//     if (error.response.status === 401) {
+//       const refreshToken = localStorage.getItem('refreshToken');
+//       try {
+//         const { data } = await instance.post('/auth/refresh', { refreshToken });
+//         setToken(data.accessToken);
+//         localStorage.setItem('refreshToken', data.refreshToken);
+
+//         return instance(error.config);
+//       } catch (error) {
+//         return Promise.reject(error);
+//       }
+//     } else {
+//       return Promise.reject(error);
+//     }
+//   }
+// );
 
 export default instance;

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { logIn, logOut, signUp } from './authOperations';
+import { getCurrentUser, logIn, logOut, signUp } from './authOperations';
 
 function isRejectedAction(action) {
   return action.type.endsWith('rejected');
@@ -46,6 +46,13 @@ const authSlice = createSlice({
       })
       .addCase(logOut.fulfilled, () => {
         return { ...initialState };
+      })
+      .addCase(getCurrentUser.fulfilled, (state, { payload }) => {
+        state.error = null;
+        state.isLoading = false;
+        state.accessToken = payload.newAccessToken;
+        state.refreshToken = payload.newRefreshToken;
+        state.user.id = payload.newSid;
       })
       .addMatcher(isPendingAction, state => {
         state.isLoading = true;

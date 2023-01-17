@@ -1,8 +1,8 @@
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 import { lazy } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { getCurrentUser } from 'redux/auth/authOperations';
+// import { getCurrentUser } from 'redux/auth/authOperations';
 import { selectIsAuth } from 'redux/auth/authSelectors';
 import SharedLayout from './SharedLayout';
 
@@ -13,7 +13,7 @@ const StatisticsPage = lazy(() =>
 const WalletPage = lazy(() => import('pages/WalletPage/WalletPage'));
 
 export const App = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
 
   const PrivateRoute = ({ component }) => {
@@ -24,9 +24,12 @@ export const App = () => {
     return isAuth ? <Navigate to="/wallet" /> : component;
   };
 
-  useEffect(() => {
-    dispatch(getCurrentUser());
-  }, [dispatch]);
+  // useEffect(() => {
+  // if (!isAuth) {
+  //   return;
+  // }
+  //   dispatch(getCurrentUser());
+  // }, [dispatch]);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
