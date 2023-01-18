@@ -1,22 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-// import { setBalance } from 'redux/auth/authSlice';
-import { fetchUserInfo } from 'shared/api/transactions';
+import { fetchTransactions } from 'shared/api/transactions';
 import TransactionsList from 'components/TransactionsList/TransactionsList';
 import Balance from 'components/Balance';
+// import { selectIsAuth } from 'redux/auth/authSelectors';
 
 function WalletPage() {
   const dispatch = useDispatch();
+  // const isAuth = useSelector(selectIsAuth);
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
-        const data = await fetchUserInfo();
-        // setTimeout(() => {
-        //   dispatch(setBalance(data.balance));
-        // }, 0);
-        setTransactions(data.transactions);
+        const data = await fetchTransactions();
+        setTransactions(data.incomes);
       } catch (error) {
         console.log(error.message);
       }
