@@ -1,32 +1,26 @@
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserBalance } from 'redux/auth/authOperations';
 import { selectBalance } from 'redux/auth/authSelectors';
-import { fetchUserBalance } from 'shared/api/transactions';
 
-function Balance({ userBalance = 0, handleSubmit }) {
+function Balance() {
   const balance = useSelector(selectBalance);
+  const [form, setForm] = useState(0);
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (balance === 0) return;
-  //   (async () => {
-  //     try {
-  //       const data = await fetchUserBalance(balance);
-  //       console.log('data', data);
-  //     } catch (error) {
-  //       alert(error.message);
-  //     }
-  //   })();
-  // }, [balance]);
+  useEffect(() => {
+    setForm(balance);
+  }, [balance]);
 
-  // const handleChange = event => {
-  //   setForm(event.target.value);
-  // };
+  const handleChange = event => {
+    setForm(event.target.value);
+  };
 
-  // const handleBalanceFormSubmit = event => {
-  //   event.preventDefault();
-  //   setBalance(event.target.elements.balance.value);
-  //   event.target.reset();
-  // };
+  const handleSubmit = event => {
+    event.preventDefault();
+    dispatch(fetchUserBalance(form));
+    event.target.reset();
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -35,8 +29,8 @@ function Balance({ userBalance = 0, handleSubmit }) {
         <input
           type="number"
           name="balance"
-          // value={balance}
-          // onChange={handleChange}
+          value={form}
+          onChange={handleChange}
           step="0.01"
           placeholder="00.00"
         />{' '}

@@ -13,13 +13,12 @@ function WalletPage() {
     (async () => {
       try {
         const data = await fetchUserInfo();
-        console.log('data', data);
         setTimeout(() => {
           dispatch(setBalance(data.balance));
         }, 0);
         setTransactions(data.transactions);
       } catch (error) {
-        alert(error.message);
+        console.log(error.message);
       }
     })();
   }, [dispatch]);

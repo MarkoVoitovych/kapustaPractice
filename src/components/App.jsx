@@ -1,9 +1,9 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { lazy } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route, Navigate } from 'react-router-dom';
-// import { getCurrentUser } from 'redux/auth/authOperations';
-import { selectIsAuth } from 'redux/auth/authSelectors';
+import { getCurrentUser } from 'redux/auth/authOperations';
+import { selectIsAuth, selectUser } from 'redux/auth/authSelectors';
 import SharedLayout from './SharedLayout';
 
 const StartPage = lazy(() => import('pages/StartPage/StartPage'));
@@ -13,8 +13,9 @@ const StatisticsPage = lazy(() =>
 const WalletPage = lazy(() => import('pages/WalletPage/WalletPage'));
 
 export const App = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
+  const { email } = useSelector(selectUser);
 
   const PrivateRoute = ({ component }) => {
     return !isAuth ? <Navigate to="/" /> : component;
@@ -24,12 +25,13 @@ export const App = () => {
     return isAuth ? <Navigate to="/wallet" /> : component;
   };
 
-  // useEffect(() => {
-  // if (!isAuth) {
-  //   return;
-  // }
-  //   dispatch(getCurrentUser());
-  // }, [dispatch]);
+  useEffect(() => {
+    if (!email) {
+      return;
+    }
+    dispatch(getCurrentUser());
+    // }, [dispatch]);
+  }, [dispatch, email]);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

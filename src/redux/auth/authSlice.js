@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getCurrentUser, logIn, logOut, signUp } from './authOperations';
+import {
+  fetchUserBalance,
+  getCurrentUser,
+  logIn,
+  logOut,
+  signUp,
+} from './authOperations';
 
 function isRejectedAction(action) {
   return action.type.endsWith('rejected');
@@ -10,9 +16,10 @@ function isPendingAction(action) {
 }
 
 const initialState = {
-  user: { id: null, balance: 0, email: null },
+  user: { balance: 0, email: null },
   accessToken: null,
   refreshToken: null,
+  sid: null,
   isLoading: false,
   error: null,
 };
@@ -33,7 +40,6 @@ const authSlice = createSlice({
           error: null,
           isLoading: false,
           user: {
-            ...state.user,
             ...payload,
           },
         };
@@ -43,9 +49,9 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.accessToken = payload.accessToken;
         state.refreshToken = payload.refreshToken;
+        state.sid = payload.sid;
         state.user = {
           balance: payload.userData.balance,
-          id: payload.userData.id,
           email: payload.userData.email,
         };
       })
@@ -57,7 +63,12 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.accessToken = payload.newAccessToken;
         state.refreshToken = payload.newRefreshToken;
-        state.user.id = payload.newSid;
+        state.sid = payload.newSid;
+      })
+      .addCase(fetchUserBalance.fulfilled, (state, { payload }) => {
+        state.error = null;
+        state.isLoading = false;
+        state.user.balance = payload.newBalance;
       })
       .addMatcher(isPendingAction, state => {
         state.isLoading = true;

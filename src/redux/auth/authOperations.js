@@ -1,11 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import * as api from 'shared/api/auth';
+import * as authApi from 'shared/api/auth';
+import * as transApi from 'shared/api/transactions';
 
 export const signUp = createAsyncThunk(
   'auth/signup',
   async (userData, { rejectWithValue }) => {
     try {
-      const data = await api.signUp(userData);
+      const data = await authApi.signUp(userData);
       return data;
     } catch ({ response }) {
       const { status, data } = response;
@@ -22,7 +23,7 @@ export const logIn = createAsyncThunk(
   'auth/login',
   async (userData, { rejectWithValue }) => {
     try {
-      const data = await api.logIn(userData);
+      const data = await authApi.logIn(userData);
       return data;
     } catch ({ response }) {
       const { status, data } = response;
@@ -40,7 +41,7 @@ export const logOut = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const accessToken = getState().accessToken;
-      const data = await api.logOut(accessToken);
+      const data = await authApi.logOut(accessToken);
       return data;
     } catch ({ response }) {
       const { status, data } = response;
@@ -57,12 +58,8 @@ export const getCurrentUser = createAsyncThunk(
   'auth/current',
   async (_, { getState, rejectWithValue }) => {
     try {
-      const {
-        refreshToken,
-        user: { id: sid },
-      } = getState();
-      const data = await api.getCurrentUser({ sid, refreshToken });
-      console.log('data', data);
+      const { refreshToken, sid } = getState();
+      const data = await authApi.getCurrentUser({ sid, refreshToken });
       return data;
     } catch ({ response }) {
       const { status, data } = response;
@@ -76,10 +73,19 @@ export const getCurrentUser = createAsyncThunk(
   }
 );
 
-export const getBalance = createAsyncThunk(
+export const fetchUserBalance = createAsyncThunk(
   'auth/balance',
   async (balance, { rejectWithValue }) => {
     try {
-    } catch (error) {}
+      const data = await transApi.fetchUserBalance(balance);
+      return data;
+    } catch ({ response }) {
+      const { status, data } = response;
+      const error = {
+        status,
+        message: data.message,
+      };
+      return rejectWithValue(error);
+    }
   }
 );

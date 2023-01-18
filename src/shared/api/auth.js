@@ -32,15 +32,15 @@ export const logOut = async accessToken => {
 };
 
 export const getCurrentUser = async ({ sid, refreshToken }) => {
-  // try {
-  setToken(refreshToken);
-  const { data } = await instance.post('/auth/refresh', { sid });
-  setToken(data.newAccessToken);
-  return data;
-  // } catch (error) {
-  // setToken();
-  // throw error;
-  // }
+  try {
+    setToken(refreshToken);
+    const { data } = await instance.post('/auth/refresh', { sid });
+    setToken(data.newAccessToken);
+    return data;
+  } catch (error) {
+    // setToken();
+    throw error;
+  }
 };
 
 // instance.interceptors.response.use(
