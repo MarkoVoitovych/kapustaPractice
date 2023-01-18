@@ -1,18 +1,18 @@
 import instance from './auth';
 
-export const getUserInfo = async () => {
+export const fetchUserInfo = async () => {
   const { data } = await instance.get('/user');
   return data;
 };
 
-export const setUserBalance = async userBalance => {
+export const fetchUserBalance = async userBalance => {
   const { data } = await instance.patch('/user/balance', {
     newBalance: userBalance,
   });
   return data;
 };
 
-export const getTransactions = async () => {
+export const fetchTransactions = async () => {
   const { data } = await instance.get('/transaction/income');
   return data;
 };

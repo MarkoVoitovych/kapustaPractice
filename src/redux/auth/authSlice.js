@@ -20,6 +20,11 @@ const initialState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
+  reducers: {
+    setBalance(state, { payload }) {
+      state.user.balance = payload;
+    },
+  },
   extraReducers: builder =>
     builder
       .addCase(signUp.fulfilled, (state, { payload }) => {
@@ -64,4 +69,5 @@ const authSlice = createSlice({
       }),
 });
 
+export const { setBalance } = authSlice.actions;
 export const authReducer = authSlice.reducer;

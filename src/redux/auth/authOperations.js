@@ -75,3 +75,11 @@ export const getCurrentUser = createAsyncThunk(
     }
   }
 );
+
+export const getBalance = createAsyncThunk(
+  'auth/balance',
+  async (balance, { rejectWithValue }) => {
+    try {
+    } catch (error) {}
+  }
+);
